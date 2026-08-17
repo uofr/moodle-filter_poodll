@@ -63,6 +63,9 @@ $fileext = optional_param('fileext', "", PARAM_TEXT);
 $mediatype = optional_param('mediatype', "", PARAM_TEXT);
 $filename = optional_param('filename', "", PARAM_TEXT);
 
+// extra params to handle assignments/quizzes
+$modulecontextid = optional_param('modulecontextid', '', PARAM_INT);
+
 //error log flags
 CONST LOG_PFL_TEMPDIR_FAIL = 1;
 CONST LOG_PFL_SAVEFILE_FAIL=2;

@@ -605,6 +605,10 @@ define(['jquery', 'core/log', 'filter_poodll/upskin_plain'], function ($, log, u
             formData.append("itemid", config.p5);
             formData.append("filename", config.filename);
             formData.append("mediatype", config.mediatype);
+
+            if (Object.hasOwn(config, 'hints') && Object.hasOwn(config.hints, 'modulecontextid')) {
+                formData.append("modulecontextid", config.hints.modulecontextid);
+            }
             console.log(formData);
             //navigator beacon polyfill
             if (!navigator.sendBeacon) {
