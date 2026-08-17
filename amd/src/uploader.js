@@ -16,6 +16,8 @@ define(['jquery', 'core/log', 'filter_poodll/upskin_plain'], function ($, log, u
 
         init: function (element, config, upskin) {
             console.log('hello from uploader.js');
+            console.log(config);
+            console.log($('[name="action"]'));
             this.config = config;
             if (upskin) {
                 this.upskin = upskin;
