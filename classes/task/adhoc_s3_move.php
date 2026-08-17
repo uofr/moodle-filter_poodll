@@ -40,6 +40,7 @@ class adhoc_s3_move extends \core\task\adhoc_task {
     //cd needs filename, filerecord and mediatype and savedatetime and convext
 
     public function execute() {
+        global $DB;
         //NB: seems any exceptions not thrown HERE, kill subsequent tasks
         //so wrap some function calls in try catch to prevent that happening
         mtrace('running adhoc s3 move');
@@ -60,10 +61,14 @@ class adhoc_s3_move extends \core\task\adhoc_task {
             mtrace($context->instanceid);
             mtrace($context->contextlevel);
             if ($context->contextlevel == CONTEXT_MODULE) {
-                mtrace('getting module context');
-                $modulecontext = \context_module::instance($context->instanceid);
-                mtrace('got module context');
-                mtrace($modulecontext->get_context_name());
+                mtrace('getting cm from db');
+                $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
+                mtrace('found cm from db');
+                mtrace($cm->module);
+                mtrace('getting modinfo');
+                $modinfo = $DB->get_record('modules', ['id' => $cm->module]);
+                mtrace('got modinfo');
+                mtrace($modinfo->name);
             }
         }
 
