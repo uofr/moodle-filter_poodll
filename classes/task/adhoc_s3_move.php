@@ -53,8 +53,8 @@ class adhoc_s3_move extends \core\task\adhoc_task {
         mtrace('infilename: ' . $cd->infilename);
         mtrace('outfilename: ' . $cd->outfilename);
         mtrace('mediatype: ' . $cd->mediatype);
-        if (property_exists($cd, 'modulecontextid')) {
-            mtrace('modulecontextid ' . $cd->modulecontextid);
+        mtrace('modulecontextid ' . $cd->modulecontextid);
+        if ($cd->modulecontextid) {
             $modulecontext = \context_module::instance_by_id($cd->modulecontextid);
             mtrace($modulecontext->module->id);
             mtrace($modulecontext->module->name);

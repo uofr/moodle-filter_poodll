@@ -114,7 +114,7 @@ switch ($datatype) {
         return;
 
     case "handles3upload":
-        $returnxml = filter_poodll_handle_s3_upload($mediatype, $contextid, $comp, $farea, $itemid, $filename);
+        $returnxml = filter_poodll_handle_s3_upload($mediatype, $contextid, $comp, $farea, $itemid, $filename, $modulecontextid);
         //probably not necessary to return anything, but just in case
         if (!$returnxml) {
             return;

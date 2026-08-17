@@ -975,12 +975,9 @@ class poodlltools {
                 'infilename' => $infilename,
                 'outfilename' => $outfilename,
                 'mediatype' => $mediatype,
-                'isodate' => $isodate
+                'isodate' => $isodate,
+                'modulecontextid' => $modulecontextid
         );
-
-        if ($modulecontextid) {
-            $qdata['modulecontextid'] = $modulecontextid;
-        }
 
         $s3_task->set_custom_data($qdata);
         // queue it (check for duplicates if Moodle 3.3+)
