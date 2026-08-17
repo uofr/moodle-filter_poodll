@@ -36,6 +36,7 @@ class adhoc_s3_move extends \core\task\adhoc_task {
     const LOG_NOT_ON_S3 = 3;
     const LOG_NOT_CONVERTED = 4;
     const LOG_PLACEHOLDER_NOT_FOUND = 5;
+    const LOG_ASSIGNMENT_NOT_FOUND = 6;
 
     //cd needs filename, filerecord and mediatype and savedatetime and convext
 
@@ -55,6 +56,7 @@ class adhoc_s3_move extends \core\task\adhoc_task {
         mtrace('outfilename: ' . $cd->outfilename);
         mtrace('mediatype: ' . $cd->mediatype);
         mtrace('modulecontextid ' . $cd->modulecontextid);
+        $isassignment = false;
         if ($cd->modulecontextid) {
             $context = \context::instance_by_id($cd->modulecontextid);
             mtrace('found context');
@@ -69,6 +71,7 @@ class adhoc_s3_move extends \core\task\adhoc_task {
                 $modinfo = $DB->get_record('modules', ['id' => $cm->module]);
                 mtrace('got modinfo');
                 mtrace($modinfo->name);
+                $isassignment = $modinfo->name == 'assign';
             }
         }
 
@@ -83,10 +86,19 @@ class adhoc_s3_move extends \core\task\adhoc_task {
             return;
         }
 
-        mtrace('found ' . count($placeholder_file_recs) . ' placeholders');
-        foreach ($placeholder_file_recs as $file_rec) {
-            mtrace($file_rec->id);
-            mtrace($file_rec->component);
+        if ($isassignment) {
+            $submissionexists = false;
+            foreach ($placeholder_file_recs as $file_rec) {
+                if ($file_rec->component == 'assignsubmission_onlinepoodll') {
+                    $submissionexists = true;
+                }
+                if (!$submissionexists) {
+                    $giveup = false;
+                    $message = 'could not find assignment submission:' . $cd->filename;
+                    $this->handle_s3_error(self::LOG_ASSIGNMENT_NOT_FOUND, $message, $cd, $giveup, $trace);
+                    return;
+                }
+            }
         }
 
 
