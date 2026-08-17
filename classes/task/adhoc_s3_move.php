@@ -85,6 +85,7 @@ class adhoc_s3_move extends \core\task\adhoc_task {
             $this->handle_s3_error(self::LOG_PLACEHOLDER_NOT_FOUND, $message, $cd, $giveup, $trace);
             return;
         }
+        mtrace('found ' . count($placeholder_file_recs) . ' placeholders');
 
         if ($isassignment) {
             $submissionexists = false;
