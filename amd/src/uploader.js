@@ -593,6 +593,7 @@ define(['jquery', 'core/log', 'filter_poodll/upskin_plain'], function ($, log, u
         },
 
         postprocess_s3_upload: function (uploader) {
+            console.log('process s3 upload');
             var config = uploader.config;
             const formData = new FormData();
             formData.append("datatype", "handles3upload");
@@ -602,6 +603,7 @@ define(['jquery', 'core/log', 'filter_poodll/upskin_plain'], function ($, log, u
             formData.append("itemid", config.p5);
             formData.append("filename", config.filename);
             formData.append("mediatype", config.mediatype);
+            console.log(formData);
             //navigator beacon polyfill
             if (!navigator.sendBeacon) {
                 navigator.sendBeacon = function (url, thedata) {
