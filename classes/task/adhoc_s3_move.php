@@ -57,9 +57,8 @@ class adhoc_s3_move extends \core\task\adhoc_task {
         if ($cd->modulecontextid) {
             $context = \context::instance_by_id($cd->modulecontextid);
             mtrace('found context');
-            list($module, $cm) = get_module_from_cmid($context->instanceid);
-            mtrace('found module');
-            mtrace($cm->module);
+            mtrace($context->instanceid);
+            mtrace($context->contextlevel);
         }
 
         //fetch any file records, that currently hold the placeholder file
