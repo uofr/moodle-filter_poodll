@@ -63,6 +63,7 @@ class adhoc_s3_move extends \core\task\adhoc_task {
                 mtrace('getting module context');
                 $modulecontext = \context_module::instance($context->instanceid);
                 mtrace('got module context');
+                mtrace($modulecontext->get_context_name());
             }
         }
 
