@@ -42,11 +42,23 @@ class adhoc_s3_move extends \core\task\adhoc_task {
     public function execute() {
         //NB: seems any exceptions not thrown HERE, kill subsequent tasks
         //so wrap some function calls in try catch to prevent that happening
+        mtrace('running adhoc s3 move');
 
         $trace = new \text_progress_trace();
 
         //get passed in data we need to perform conversion
         $cd = $this->get_custom_data();
+
+        mtrace('filename: ' . $cd->filename);
+        mtrace('infilename: ' . $cd->infilename);
+        mtrace('outfilename: ' . $cd->outfilename);
+        mtrace('mediatype: ' . $cd->mediatype);
+        if (property_exists($cd, 'modulecontextid')) {
+            mtrace('modulecontextid ' . $cd->modulecontextid);
+            $modulecontext = \context_module::instance_by_id($cd->modulecontextid);
+            mtrace($modulecontext->module->id);
+            mtrace($modulecontext->module->name);
+        }
 
         //fetch any file records, that currently hold the placeholder file
         //usually just one, but occasionally there will be two (1 in draft, and 1 in perm)
@@ -58,6 +70,8 @@ class adhoc_s3_move extends \core\task\adhoc_task {
             $this->handle_s3_error(self::LOG_PLACEHOLDER_NOT_FOUND, $message, $cd, $giveup, $trace);
             return;
         }
+
+        mtrace('found ' . count($placeholder_file_recs) . ' placeholders');
 
         //fetch the file
         try {
@@ -96,6 +110,7 @@ class adhoc_s3_move extends \core\task\adhoc_task {
         //do the replace
         try {
             foreach ($placeholder_file_recs as $file_rec) {
+                mtrace('replacing ' . $file_rec->id);
                 \filter_poodll\poodlltools::replace_placeholderfile_in_moodle($cd->filerecord, $file_rec, $tempfilepath);
                 //log what we just did
                 $cd->filerecord = $file_rec;

@@ -462,7 +462,7 @@ function filter_poodll_confirmarrival($mediatype, $filename) {
 }
 
 /* The alerts us to the fact that the file has been uploaded to S3. We commence handling */
-function filter_poodll_handle_s3_upload($mediatype, $contextid, $comp, $farea, $itemid, $filename) {
+function filter_poodll_handle_s3_upload($mediatype, $contextid, $comp, $farea, $itemid, $filename, $modulecontextid = null) {
 
     $return = filter_poodll_fetchReturnArray(true);
 
@@ -481,7 +481,7 @@ function filter_poodll_handle_s3_upload($mediatype, $contextid, $comp, $farea, $
     $draftfilerecord->timecreated = time();
     $draftfilerecord->timemodified = time();
 
-    $ret = \filter_poodll\poodlltools::postprocess_s3_upload($mediatype, $draftfilerecord);
+    $ret = \filter_poodll\poodlltools::postprocess_s3_upload($mediatype, $draftfilerecord, $modulecontextid);
 
     if (!$ret) {
         $return['success'] = false;
