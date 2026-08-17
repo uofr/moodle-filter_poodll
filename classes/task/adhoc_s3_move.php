@@ -84,6 +84,11 @@ class adhoc_s3_move extends \core\task\adhoc_task {
         }
 
         mtrace('found ' . count($placeholder_file_recs) . ' placeholders');
+        foreach ($placeholder_file_recs as $file_rec) {
+            mtrace($file_rec->id);
+            mtrace($file_rec->component);
+        }
+
 
         //fetch the file
         try {
