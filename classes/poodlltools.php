@@ -960,7 +960,7 @@ class poodlltools {
         return $thefile;
     }
 
-    public static function register_s3_download_task($mediatype, $infilename, $outfilename, $draftfilerecord, $modulecontextid = null) {
+    public static function register_s3_download_task($mediatype, $infilename, $outfilename, $draftfilerecord, $uploadtype = null) {
         global $CFG, $USER;
 
         // set up task and add custom data
@@ -976,7 +976,7 @@ class poodlltools {
                 'outfilename' => $outfilename,
                 'mediatype' => $mediatype,
                 'isodate' => $isodate,
-                'modulecontextid' => $modulecontextid
+                'uploadtype' => $uploadtype
         );
 
         $s3_task->set_custom_data($qdata);
@@ -1059,7 +1059,7 @@ class poodlltools {
         }
     }
 
-    public static function postprocess_s3_upload($mediatype, $draftfilerecord, $modulecontextid = null) {
+    public static function postprocess_s3_upload($mediatype, $draftfilerecord, $uploadtype = null) {
         global $CFG;
 
         $s3filename = \filter_poodll\awsremote::fetch_s3_filename($mediatype, $draftfilerecord->filename);
@@ -1078,7 +1078,7 @@ class poodlltools {
         $storedfile = self::save_placeholderfile_in_moodle($mediatype, $draftfilerecord);
         if ($storedfile) {
             $draftfilerecord->id = $storedfile->get_id();
-            self::register_s3_download_task($mediatype, $infilename, $outfilename, $draftfilerecord, $modulecontextid);
+            self::register_s3_download_task($mediatype, $infilename, $outfilename, $draftfilerecord, $uploadtype);
             $success = true;
         }
 

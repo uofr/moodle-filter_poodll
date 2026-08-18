@@ -64,7 +64,7 @@ $mediatype = optional_param('mediatype', "", PARAM_TEXT);
 $filename = optional_param('filename', "", PARAM_TEXT);
 
 // extra params to handle assignments/quizzes
-$modulecontextid = optional_param('modulecontextid', '', PARAM_INT);
+$uploadtype = optional_param('uploadtype', '', PARAM_INT);
 
 //error log flags
 CONST LOG_PFL_TEMPDIR_FAIL = 1;
@@ -114,7 +114,7 @@ switch ($datatype) {
         return;
 
     case "handles3upload":
-        $returnxml = filter_poodll_handle_s3_upload($mediatype, $contextid, $comp, $farea, $itemid, $filename, $modulecontextid);
+        $returnxml = filter_poodll_handle_s3_upload($mediatype, $contextid, $comp, $farea, $itemid, $filename, $uploadtype);
         //probably not necessary to return anything, but just in case
         if (!$returnxml) {
             return;
@@ -462,7 +462,7 @@ function filter_poodll_confirmarrival($mediatype, $filename) {
 }
 
 /* The alerts us to the fact that the file has been uploaded to S3. We commence handling */
-function filter_poodll_handle_s3_upload($mediatype, $contextid, $comp, $farea, $itemid, $filename, $modulecontextid = null) {
+function filter_poodll_handle_s3_upload($mediatype, $contextid, $comp, $farea, $itemid, $filename, $uploadtype = null) {
 
     $return = filter_poodll_fetchReturnArray(true);
 
@@ -481,7 +481,7 @@ function filter_poodll_handle_s3_upload($mediatype, $contextid, $comp, $farea, $
     $draftfilerecord->timecreated = time();
     $draftfilerecord->timemodified = time();
 
-    $ret = \filter_poodll\poodlltools::postprocess_s3_upload($mediatype, $draftfilerecord, $modulecontextid);
+    $ret = \filter_poodll\poodlltools::postprocess_s3_upload($mediatype, $draftfilerecord, $uploadtype);
 
     if (!$ret) {
         $return['success'] = false;

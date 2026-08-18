@@ -15,9 +15,6 @@ define(['jquery', 'core/log', 'filter_poodll/upskin_plain'], function ($, log, u
         },
 
         init: function (element, config, upskin) {
-            console.log('hello from uploader.js');
-            console.log(config);
-            console.log($('[name="action"]'));
             this.config = config;
             if (upskin) {
                 this.upskin = upskin;
@@ -595,7 +592,6 @@ define(['jquery', 'core/log', 'filter_poodll/upskin_plain'], function ($, log, u
         },
 
         postprocess_s3_upload: function (uploader) {
-            console.log('process s3 upload');
             var config = uploader.config;
             const formData = new FormData();
             formData.append("datatype", "handles3upload");
@@ -606,10 +602,9 @@ define(['jquery', 'core/log', 'filter_poodll/upskin_plain'], function ($, log, u
             formData.append("filename", config.filename);
             formData.append("mediatype", config.mediatype);
 
-            if (Object.hasOwn(config, 'hints') && Object.hasOwn(config.hints, 'modulecontextid')) {
-                formData.append("modulecontextid", config.hints.modulecontextid);
+            if (Object.hasOwn(config, 'hints') && Object.hasOwn(config.hints, 'uploadtype')) {
+                formData.append("uploadtype", config.hints.uploadtype);
             }
-            console.log(formData);
             //navigator beacon polyfill
             if (!navigator.sendBeacon) {
                 navigator.sendBeacon = function (url, thedata) {

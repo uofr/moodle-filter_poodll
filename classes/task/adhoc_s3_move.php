@@ -55,24 +55,10 @@ class adhoc_s3_move extends \core\task\adhoc_task {
         mtrace('infilename: ' . $cd->infilename);
         mtrace('outfilename: ' . $cd->outfilename);
         mtrace('mediatype: ' . $cd->mediatype);
-        mtrace('modulecontextid ' . $cd->modulecontextid);
         $isassignment = false;
-        if ($cd->modulecontextid) {
-            $context = \context::instance_by_id($cd->modulecontextid);
-            mtrace('found context');
-            mtrace($context->instanceid);
-            mtrace($context->contextlevel);
-            if ($context->contextlevel == CONTEXT_MODULE) {
-                mtrace('getting cm from db');
-                $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
-                mtrace('found cm from db');
-                mtrace($cm->module);
-                mtrace('getting modinfo');
-                $modinfo = $DB->get_record('modules', ['id' => $cm->module]);
-                mtrace('got modinfo');
-                mtrace($modinfo->name);
-                $isassignment = $modinfo->name == 'assign';
-            }
+        if (property_exists($cd, 'uploadtype') && !empty($cd->uploadtype)) {
+            mtrace('uploadtype ' . $cd->uploadtype);
+            $isassignment = $cd->uploadtype == 'assign_submission_onlinepoodll';
         }
 
         //fetch any file records, that currently hold the placeholder file
