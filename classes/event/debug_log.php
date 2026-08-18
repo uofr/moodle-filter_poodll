@@ -59,7 +59,7 @@ class debug_log extends \core\event\base {
         if ($debugobject->userid !== false) {
             $data['userid'] = $debugobject->userid;
             // We pass this in 'other' so init() can pick it up.
-            $data['other_relateduserid'] = $debugobject->userid;
+            // $data['other_relateduserid'] = $debugobject->userid;
         }
 
         /** @var debug_log $event */
