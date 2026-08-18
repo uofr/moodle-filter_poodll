@@ -114,12 +114,12 @@ class adhoc_s3_move extends \core\task\adhoc_task {
                 if ($file_rec->component == 'assignsubmission_onlinepoodll') {
                     $submissionexists = true;
                 }
-                if (!$submissionexists) {
-                    $giveup = false;
-                    $message = 'could not find assignment submission:' . $cd->filename;
-                    $this->handle_s3_error(self::LOG_ASSIGNMENT_NOT_FOUND, $message, $cd, $giveup, $trace);
-                    return;
-                }
+            }
+            if (!$submissionexists) {
+                $giveup = false;
+                $message = 'could not find assignment submission:' . $cd->filename;
+                $this->handle_s3_error(self::LOG_ASSIGNMENT_NOT_FOUND, $message, $cd, $giveup, $trace);
+                return;
             }
         }
 
