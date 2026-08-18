@@ -73,21 +73,6 @@ class adhoc_s3_move extends \core\task\adhoc_task {
         }
         mtrace('found ' . count($placeholder_file_recs) . ' placeholders');
 
-        if ($isassignment) {
-            $submissionexists = false;
-            foreach ($placeholder_file_recs as $file_rec) {
-                if ($file_rec->component == 'assignsubmission_onlinepoodll') {
-                    $submissionexists = true;
-                }
-                if (!$submissionexists) {
-                    $giveup = false;
-                    $message = 'could not find assignment submission:' . $cd->filename;
-                    $this->handle_s3_error(self::LOG_ASSIGNMENT_NOT_FOUND, $message, $cd, $giveup, $trace);
-                    return;
-                }
-            }
-        }
-
 
         //fetch the file
         try {
@@ -121,6 +106,21 @@ class adhoc_s3_move extends \core\task\adhoc_task {
         } else {
             //this indicates the file was found and saved and the path returned
             $tempfilepath = $ret;
+        }
+
+        if ($isassignment) {
+            $submissionexists = false;
+            foreach ($placeholder_file_recs as $file_rec) {
+                if ($file_rec->component == 'assignsubmission_onlinepoodll') {
+                    $submissionexists = true;
+                }
+                if (!$submissionexists) {
+                    $giveup = false;
+                    $message = 'could not find assignment submission:' . $cd->filename;
+                    $this->handle_s3_error(self::LOG_ASSIGNMENT_NOT_FOUND, $message, $cd, $giveup, $trace);
+                    return;
+                }
+            }
         }
 
         //do the replace
