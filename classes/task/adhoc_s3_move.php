@@ -49,7 +49,7 @@ class adhoc_s3_move extends \core\task\adhoc_task {
         $cd = $this->get_custom_data();
         mtrace('adhoc s3 move for ' . $cd->filename);
 
-        if (property_exists($cd, '$uploadtype')) {
+        if (property_exists($cd, 'uploadtype')) {
             mtrace('uploadtype ' . $cd->uploadtype);
         }
 
