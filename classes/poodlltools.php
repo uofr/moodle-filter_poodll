@@ -979,7 +979,7 @@ class poodlltools {
         );
 
         if (!empty($uploadtype)) {
-            $qdata['$uploadtype'] = $uploadtype;
+            $qdata['uploadtype'] = $uploadtype;
         }
 
         $s3_task->set_custom_data($qdata);
