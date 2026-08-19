@@ -47,6 +47,11 @@ class adhoc_s3_move extends \core\task\adhoc_task {
 
         //get passed in data we need to perform conversion
         $cd = $this->get_custom_data();
+        mtrace('adhoc s3 move for ' . $cd->filename);
+
+        if (property_exists($cd, '$uploadtype')) {
+            mtrace('uploadtype ' . $cd->uploadtype);
+        }
 
         //fetch any file records, that currently hold the placeholder file
         //usually just one, but occasionally there will be two (1 in draft, and 1 in perm)
@@ -58,6 +63,8 @@ class adhoc_s3_move extends \core\task\adhoc_task {
             $this->handle_s3_error(self::LOG_PLACEHOLDER_NOT_FOUND, $message, $cd, $giveup, $trace);
             return;
         }
+
+        mtrace(count($placeholder_file_recs) . ' placeholder(s) found');
 
         //fetch the file
         try {
