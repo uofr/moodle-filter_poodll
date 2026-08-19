@@ -602,7 +602,7 @@ define(['jquery', 'core/log', 'filter_poodll/upskin_plain'], function ($, log, u
             formData.append("filename", config.filename);
             formData.append("mediatype", config.mediatype);
 
-            if (Object.hasOwn(formDatam, 'hints') && Object.hasOwn(formData.hints, 'uploadtype')) {
+            if (Object.hasOwn(formData, 'hints') && Object.hasOwn(formData.hints, 'uploadtype')) {
                 formData.append('uploadtype', config.hints.uploadtype);
             }
 
