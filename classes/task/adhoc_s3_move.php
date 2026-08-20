@@ -107,11 +107,6 @@ class adhoc_s3_move extends \core\task\adhoc_task {
                 //log what we just did
                 $cd->filerecord = $file_rec;
                 \filter_poodll\event\adhoc_move_completed::create_from_task($cd)->trigger();
-
-                // Event so poodll assign submission plugin can make sure the assignment submission is not the placeholder.
-                if ($cd->uploadtype == 'assign_submission_onlinepoodll') {
-                    \filter_poodll\event\adhoc_move_assignment_completed::create_from_task($cd)->trigger();
-                }
             }
         } catch (\Exception $e) {
             $giveup = true;
