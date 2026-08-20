@@ -346,6 +346,7 @@ $string['event_adhoc_registered'] = 'Poodll Adhoc task registered';
 $string['event_adhoc_move_registered'] = 'Poodll Adhoc move task registered';
 $string['event_adhoc_convert_registered'] = 'Poodll Adhoc convert task registered';
 $string['event_adhoc_completed'] = 'Poodll Adhoc task completed';
+$string['event_adhoc_move_assignment_completed'] = 'Poodll Adhoc assignment move task completed';
 $string['event_adhoc_move_completed'] = 'Poodll Adhoc move task completed';
 $string['event_adhoc_convert_completed'] = 'Poodll Adhoc convert task completed';
 $string['event_debug_log'] = 'Poodll debug note';
