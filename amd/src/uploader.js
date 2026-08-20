@@ -602,10 +602,6 @@ define(['jquery', 'core/log', 'filter_poodll/upskin_plain'], function ($, log, u
             formData.append("filename", config.filename);
             formData.append("mediatype", config.mediatype);
 
-            if (Object.hasOwn(config, 'hints') && Object.hasOwn(config.hints, 'uploadtype')) {
-                formData.append('uploadtype', config.hints.uploadtype);
-            }
-
             //navigator beacon polyfill
             if (!navigator.sendBeacon) {
                 navigator.sendBeacon = function (url, thedata) {

@@ -1062,7 +1062,7 @@ class poodlltools {
         }
     }
 
-    public static function postprocess_s3_upload($mediatype, $draftfilerecord, $uploadtype = null) {
+    public static function postprocess_s3_upload($mediatype, $draftfilerecord) {
         global $CFG;
 
         $s3filename = \filter_poodll\awsremote::fetch_s3_filename($mediatype, $draftfilerecord->filename);
@@ -1081,7 +1081,7 @@ class poodlltools {
         $storedfile = self::save_placeholderfile_in_moodle($mediatype, $draftfilerecord);
         if ($storedfile) {
             $draftfilerecord->id = $storedfile->get_id();
-            self::register_s3_download_task($mediatype, $infilename, $outfilename, $draftfilerecord, $uploadtype);
+            self::register_s3_download_task($mediatype, $infilename, $outfilename, $draftfilerecord);
             $success = true;
         }
 
