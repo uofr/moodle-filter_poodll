@@ -35,14 +35,15 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
 
         mtrace('Execute cleanup_failed_s3_move task.');
 
-        $query = "SELECT * FROM {files} f
-        WHERE f.filename LIKE '%:basefilename%'
-        AND f.contenthash = ':contenthash'
-        AND f.component != ':component'";
-
         $basefilename = 'poodllfile';
         $contenthash = \filter_poodll\poodlltools::fetch_placeholder_hash('audio');
         $component = 'user';
+
+        $like = $DB->sql_like('f.filename', ':filename');
+        $query = "SELECT * FROM {files} f
+        WHERE $like
+        AND f.contenthash = :contenthash
+        AND f.component != :component";
 
         $params = [
            'basefilename' => $basefilename,
