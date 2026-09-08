@@ -46,7 +46,7 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
         AND f.component != :component";
 
         $params = [
-           'basefilename' => $basefilename,
+           'basefilename' => "%$basefilename%",
            'contenthash' => $contenthash,
            'component' => $component
         ];
