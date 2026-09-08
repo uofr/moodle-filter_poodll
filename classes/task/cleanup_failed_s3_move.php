@@ -39,7 +39,7 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
         $contenthash = \filter_poodll\poodlltools::fetch_placeholder_hash('audio');
         $component = 'user';
 
-        $like = $DB->sql_like('f.filename', ':filename');
+        $like = $DB->sql_like('f.filename', ':basefilename');
         $query = "SELECT * FROM {files} f
         WHERE $like
         AND f.contenthash = :contenthash
