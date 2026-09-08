@@ -555,3 +555,5 @@ $string['fa-button-uploadrecording']="Upload Recording";
 
 $string['cloudpoodllserver'] = 'Cloud Poodll Server';
 $string['cloudpoodllserver_details'] = 'The server to use for Cloud Poodll. Only change this if Poodll has provided a different one.';
+
+$string['task_cleanup_failed_s3_move'] = 'Clean Up Failed S3 Move';

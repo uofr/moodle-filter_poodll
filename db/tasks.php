@@ -15,18 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * PoodLL filter
+ * Definition of filter_poodll scheduled tasks.
  *
- * @package    filter
- * @subpackage poodll
- * @copyright  2015 Justin Hunt poodllsupport@gmail.com
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   filter_poodll
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2026081602;
-$plugin->requires = 2023100900; //moodle 4.3
-$plugin->component = 'filter_poodll';
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '3.1.93 (Build 2026081600)';
+$tasks = [
+    [
+        'classname' => 'filter_poodll\task\cleanup_failed_s3_move',
+        'blocking' => 0,
+        'minute' => '00',
+        'hour' => '00',
+        'day' => '*'
+    ],
+];
