@@ -38,9 +38,11 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
         mtrace('Execute cleanup_failed_s3_move task.');
 
         $contenthash = \filter_poodll\poodlltools::fetch_placeholder_hash('audio');
+        $today = \core\di::get(\core\clock::class)->now()->setTime(0, 0);
+        $timestamp = $today->getTimestamp();
 
         try {
-            $placeholderfiles = $this->get_placeholder_files($contenthash);
+            $placeholderfiles = $this->get_placeholder_files($contenthash, $timestamp);
         }
         catch (moodle_exception $exception) {
             $errormessage = $exception->getMessage();
@@ -55,7 +57,7 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
 
         foreach ($placeholderfiles as $placeholder) {
             try {
-                $converteddrafts = $this->get_converted_draft_files($placeholder->filename, $contenthash);
+                $converteddrafts = $this->get_converted_draft_files($placeholder->filename, $contenthash, $timestamp);
             }
             catch (moodle_exception $exception) {
                 $errormessage = $exception->getMessage();
@@ -92,9 +94,12 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
 
     /**
      * Get files using the placeholder content hash that are not user draft files.
+     * @param string $contenthash - Placeholder content hash.
+     * @param int $timestamp - Look for files created since this timestamp.
+     * 
      * @return array
      */
-    private function get_placeholder_files($contenthash) {
+    private function get_placeholder_files($contenthash, $timestamp) {
         global $DB;
 
         $basefilename = 'poodllfile';
@@ -104,12 +109,14 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
         $query = "SELECT * FROM {files} f
             WHERE $like
             AND f.contenthash = :contenthash
-            AND f.component != :component";
+            AND f.component != :component
+            AND f.timecreated >= :today";
 
         $params = [
            'basefilename' => "%$basefilename%",
            'contenthash' => $contenthash,
-           'component' => $component
+           'component' => $component,
+           'today' => $timestamp
         ];
 
         return $DB->get_records_sql($query, $params);
@@ -118,10 +125,11 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
     /**
      * Get draft files for a given poodll file that are not using the placeholder content hash.
      * @param string $filename - Name of poodll file.
+     * @param int $timestamp - Limit query to files created since timestamp.
      * 
      * @return array
      */
-    private function get_converted_draft_files($filename, $contenthash) {
+    private function get_converted_draft_files($filename, $contenthash, $timestamp) {
         global $DB;
 
         $component = 'user';
@@ -131,13 +139,15 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
             WHERE f.filename = :filename
             AND f.contenthash != :contenthash
             AND f.component = :component
-            AND f.filearea = :filearea";
+            AND f.filearea = :filearea
+            AND f.timecreated >= :today";
 
         $params = [
            'filename' => $filename,
            'contenthash' => $contenthash,
            'component' => $component,
-           'filearea' => $filearea
+           'filearea' => $filearea,
+           'today' => $timestamp
         ];
 
         return $DB->get_records_sql($query, $params);
