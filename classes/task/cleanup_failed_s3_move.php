@@ -35,32 +35,34 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
     public function execute() {
         mtrace('Execute cleanup_failed_s3_move task.');
 
-        $defaultcontenthashes = [
-            \filter_poodll\poodlltools::fetch_placeholder_hash('audio'),
-            \filter_poodll\poodlltools::fetch_placeholder_hash('video')
+        $mediatypes = [
+            'audio',
+            'video'
         ];
         $today = \core\di::get(\core\clock::class)->now()->setTime(0, 0);
         $timestamp = $today->getTimestamp();
 
-        foreach ($defaultcontenthashes as $contenthash) {
-            self::fix_broken_placeholders($contenthash, $timestamp);
+        foreach ($mediatypes as $mediatype) {
+            self::fix_broken_placeholders($mediatype, $timestamp);
         }
     }
 
-    private function fix_broken_placeholders($contenthash, $timestamp) {
+    private function fix_broken_placeholders($mediatype, $timestamp) {
         global $CFG;
+
+        $contenthash = \filter_poodll\poodlltools::fetch_placeholder_hash($mediatype);
 
         try {
             $placeholderfiles = $this->get_broken_placeholder_files($contenthash, $timestamp);
         }
         catch (moodle_exception $exception) {
             $errormessage = $exception->getMessage();
-            mtrace("ERROR: Could not get placeholder files: $errormessage.");
+            mtrace("ERROR: Could not get placeholder $mediatype files: $errormessage.");
             return;
         }
 
         if (count($placeholderfiles) == 0) {
-            mtrace('No placeholder files to be replaced.');
+            mtrace("No $mediatype placeholder files to be replaced.");
             return;
         }
 
