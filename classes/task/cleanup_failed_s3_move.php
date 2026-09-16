@@ -115,7 +115,7 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
                 AND f2.contenthash != :contenthash2
                 AND f2.component = :component2
                 AND f2.filearea = :filearea2
-                AND f2.timecreated >= today2
+                AND f2.timecreated >= :today2
             )";
 
         $params = [
