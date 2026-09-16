@@ -57,11 +57,11 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
 
         foreach ($placeholderfiles as $placeholder) {
             try {
-                $converteddrafts = $this->get_converted_draft_files($placeholder->filename, $contenthash, $timestamp);
+                $converteddraft = $this->get_converted_draft_file($placeholder->filename, $contenthash, $timestamp);
             }
             catch (moodle_exception $exception) {
                 $errormessage = $exception->getMessage();
-                mtrace("ERROR: Could not get converted draft files for {$placeholder->filename}: $errormessage.");
+                mtrace("ERROR: Could not get converted draft file for {$placeholder->filename}: $errormessage.");
                 continue;
             }
 
@@ -132,7 +132,7 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
      * 
      * @return array
      */
-    private function get_converted_draft_files($filename, $contenthash, $timestamp) {
+    private function get_converted_draft_file($filename, $contenthash, $timestamp) {
         global $DB;
 
         $component = 'user';
@@ -153,7 +153,7 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
            'today' => $timestamp
         ];
 
-        return $DB->get_records_sql($query, $params);
+        return $DB->get_record_sql($query, $params);
     }
 
 }
