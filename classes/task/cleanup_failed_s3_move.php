@@ -33,13 +33,22 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
     }
 
     public function execute() {
-        global $CFG;
-
         mtrace('Execute cleanup_failed_s3_move task.');
 
-        $contenthash = \filter_poodll\poodlltools::fetch_placeholder_hash('audio');
+        $defaultcontenthashes = [
+            \filter_poodll\poodlltools::fetch_placeholder_hash('audio'),
+            \filter_poodll\poodlltools::fetch_placeholder_hash('video')
+        ];
         $today = \core\di::get(\core\clock::class)->now()->setTime(0, 0);
         $timestamp = $today->getTimestamp();
+
+        foreach ($defaultcontenthashes as $contenthash) {
+            self::fix_broken_placeholders($contenthash, $timestamp);
+        }
+    }
+
+    private function fix_broken_placeholders($contenthash, $timestamp) {
+        global $CFG;
 
         try {
             $placeholderfiles = $this->get_placeholder_files($contenthash, $timestamp);
