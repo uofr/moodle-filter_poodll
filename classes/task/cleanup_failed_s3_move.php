@@ -75,7 +75,7 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
                 continue;
             }
 
-            $converteddraft = $converteddrafts[0];
+            $converteddraft = array_shift($converteddrafts);
             $tempfilepath = $CFG->tempdir . "/" . $placeholder->filename;
 
             try {
