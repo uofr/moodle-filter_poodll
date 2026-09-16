@@ -51,7 +51,7 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
         global $CFG;
 
         try {
-            $placeholderfiles = $this->get_placeholder_files($contenthash, $timestamp);
+            $placeholderfiles = $this->get_broken_placeholder_files($contenthash, $timestamp);
         }
         catch (moodle_exception $exception) {
             $errormessage = $exception->getMessage();
@@ -94,7 +94,7 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
      * 
      * @return array
      */
-    private function get_placeholder_files($contenthash, $timestamp) {
+    private function get_broken_placeholder_files($contenthash, $timestamp) {
         global $DB;
 
         $basefilename = 'poodllfile';
@@ -107,14 +107,27 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
             AND f.contenthash = :contenthash
             AND f.component != :component
             AND f.filearea != :filearea
-            AND f.timecreated >= :today";
+            AND f.timecreated >= :today
+            AND f.filename IN (
+                SELECT f2.filename
+                FROM {files} f2
+                WHERE f2.filename = f.filename
+                AND f2.contenthash != :contenthash2
+                AND f2.component = :component2
+                AND f2.filearea = :filearea2
+                AND f2.timecreated >= today2
+            )";
 
         $params = [
            'basefilename' => "%$basefilename%",
            'contenthash' => $contenthash,
            'component' => $component,
            'filearea' => $filearea,
-           'today' => $timestamp
+           'today' => $timestamp,
+           'contenthash2' => $contenthash,
+           'component2' => $component,
+           'filearea2' => $filearea,
+           'today2' => $timestamp
         ];
 
         return $DB->get_records_sql($query, $params);
