@@ -69,10 +69,7 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
 
             try {
                 \filter_poodll\poodlltools::replace_placeholderfile_in_moodle($converteddraft, $placeholder, $tempfilepath);
-                mtrace("Updated $placeholder->filename:
-                 component: $placeholder->component
-                 filearea: $placeholder->filearea
-                 itemid: $placeholder->itemid");
+                mtrace("Updated $placeholder->filename: component: $placeholder->component filearea: $placeholder->filearea itemid: $placeholder->itemid");
             }
             catch (moodle_exception $exception) {
                 $errormessage = $exception->getMessage();
