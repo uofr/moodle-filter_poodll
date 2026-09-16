@@ -65,17 +65,6 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
                 continue;
             }
 
-            $totalconverteddrafts = count($converteddrafts);
-            if ($totalconverteddrafts == 0) {
-                mtrace("Could not find converted draft files for {$placeholder->filename}.");
-                continue;
-            }
-            else if ($totalconverteddrafts > 1) {
-                mtrace("ERROR: Multiple converted draft files found for {$placeholder->filename}.");
-                continue;
-            }
-
-            $converteddraft = array_shift($converteddrafts);
             $tempfilepath = $CFG->tempdir . "/" . $placeholder->filename;
 
             try {
