@@ -104,18 +104,21 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
 
         $basefilename = 'poodllfile';
         $component = 'user';
+        $filearea = 'draft';
 
         $like = $DB->sql_like('f.filename', ':basefilename');
         $query = "SELECT * FROM {files} f
             WHERE $like
             AND f.contenthash = :contenthash
             AND f.component != :component
+            AND f.filearea != :filearea
             AND f.timecreated >= :today";
 
         $params = [
            'basefilename' => "%$basefilename%",
            'contenthash' => $contenthash,
            'component' => $component,
+           'filearea' => $filearea,
            'today' => $timestamp
         ];
 
