@@ -43,6 +43,7 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
         $timestamp = $today->getTimestamp();
 
         foreach ($mediatypes as $mediatype) {
+            mtrace("Fixing $mediatype");
             self::fix_broken_placeholders($mediatype, $timestamp);
         }
     }
@@ -103,9 +104,8 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
         $component = 'user';
         $filearea = 'draft';
 
-        $like = $DB->sql_like('f.filename', ':basefilename');
         $query = "SELECT * FROM {files} f
-            WHERE $like
+            WHERE f.filename = :basefilename
             AND f.contenthash = :contenthash
             AND f.component != :component
             AND f.filearea != :filearea
