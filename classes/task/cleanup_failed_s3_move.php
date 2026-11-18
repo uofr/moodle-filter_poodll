@@ -112,7 +112,7 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
             AND f.contenthash = :contenthash
             AND f.component != :component
             AND f.filearea != :filearea
-            AND f.timecreated >= :yesterday
+            AND f.timecreated >= :ts
             AND f.filename IN (
                 SELECT f2.filename
                 FROM {files} f2
@@ -120,7 +120,7 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
                 AND f2.contenthash != :contenthash2
                 AND f2.component = :component2
                 AND f2.filearea = :filearea2
-                AND f2.timecreated >= :today2
+                AND f2.timecreated >= :ts2
             )";
 
         $params = [
@@ -128,11 +128,11 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
            'contenthash' => $contenthash,
            'component' => $component,
            'filearea' => $filearea,
-           'yesterday' => $timestamp,
+           'ts' => $timestamp,
            'contenthash2' => $contenthash,
            'component2' => $component,
            'filearea2' => $filearea,
-           'today2' => $timestamp
+           'ts2' => $timestamp
         ];
 
         return $DB->get_records_sql($query, $params);
@@ -156,14 +156,14 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
             AND f.contenthash != :contenthash
             AND f.component = :component
             AND f.filearea = :filearea
-            AND f.timecreated >= :yesterday";
+            AND f.timecreated >= :ts";
 
         $params = [
            'filename' => $filename,
            'contenthash' => $contenthash,
            'component' => $component,
            'filearea' => $filearea,
-           'yesterday' => $timestamp
+           'ts' => $timestamp
         ];
 
         return $DB->get_record_sql($query, $params);
