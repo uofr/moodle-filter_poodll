@@ -39,8 +39,10 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
             'audio',
             'video'
         ];
-        $today = \core\di::get(\core\clock::class)->now()->setTime(0, 0);
-        $timestamp = $today->getTimestamp();
+        $yesterday = \core\di::get(\core\clock::class)->now()->modify('-1 day');
+        $timestamp = $yesterday->getTimestamp();
+
+        mtrace('Fixing up Poodll files uploaded since ' . $yesterday->format('l, F d, Y, g:i a'));
 
         foreach ($mediatypes as $mediatype) {
             mtrace("Fixing $mediatype");
@@ -110,7 +112,7 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
             AND f.contenthash = :contenthash
             AND f.component != :component
             AND f.filearea != :filearea
-            AND f.timecreated >= :today
+            AND f.timecreated >= :yesterday
             AND f.filename IN (
                 SELECT f2.filename
                 FROM {files} f2
@@ -126,7 +128,7 @@ class cleanup_failed_s3_move extends \core\task\scheduled_task {
            'contenthash' => $contenthash,
            'component' => $component,
            'filearea' => $filearea,
-           'today' => $timestamp,
+           'yesterday' => $timestamp,
            'contenthash2' => $contenthash,
            'component2' => $component,
            'filearea2' => $filearea,
